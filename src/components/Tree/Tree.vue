@@ -42,7 +42,12 @@
                     if(data[i].leaf && i === 0 && !lastSelect) {
                         data[i].checked = true;
                         this.lastSelect = data[i];
-                        this.$emit('point-select',data[i]);
+                        //多选状态格式匹配
+                        if(this.multiSelect) {
+                            this.$emit('point-select',[data[i]], [data[i].id]);
+                        }else {
+                            this.$emit('point-select',data[i], data[i].id);
+                        }
                     }
                 }
             }
@@ -90,20 +95,22 @@
                     this.nodes.push(item);
                     this.nodeIds.push(item.id);
                     debounce(this.debounceFn, delay)();
+                }else {  //单选时直接传递值
+                    this.pointSelect(item, item.id)
                 }
             },
             debounceFn() {
-                this.pointSelect(this.nodes);
+                this.pointSelect(this.nodes, this.nodeIds);
                 this.nodes = [];
                 this.nodeIds = [];
             },
-            pointSelect(item) {
+            pointSelect(item, itemId) {
                 //非多选状态
                 if(!this.multiSelect && item.leaf) {
-                    this.$emit('point-select',item);
+                    this.$emit('point-select',item, itemId);
                 }
                 if(this.multiSelect) {
-                    this.$emit('point-select',item);
+                    this.$emit('point-select',item, itemId);
                 }
             },
             expand(item) {
@@ -121,7 +128,7 @@
 }
 .node {
     cursor: pointer;
-    margin-left: 10px;
+    // margin-left: 10px;
     padding: 5px 0;
 }
 .space-null {

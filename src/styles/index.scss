@@ -24,6 +24,11 @@ html {
     height: 100%;
 }
 
+.app-main-container {
+    padding: 10px;
+    height: $appMainHeight;
+}
+
 *,
 *:before,
 *:after {
