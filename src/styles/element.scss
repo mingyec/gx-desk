@@ -6,3 +6,9 @@
         width: 38%;
     }
 }
+
+.el-checkbox-group .el-checkbox,
+.el-checkbox+.el-checkbox {
+    margin-right: 30px;
+    margin-left: 0;
+}

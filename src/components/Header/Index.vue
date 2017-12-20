@@ -1,6 +1,8 @@
 <template>
     <header class="panel-header">
         <span v-text="title"></span>
+        <slot name="popover"></slot>
+        <slot name="btn"></slot>
     </header>
 </template>
 
