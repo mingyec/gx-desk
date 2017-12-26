@@ -29,6 +29,15 @@ html {
     height: $appMainHeight;
 }
 
+.charts-container {
+    height: 300px;
+    min-width: 400px;
+}
+.el-dialog__body .charts-container {
+    height: 500px;
+    min-width: 400px;
+}
+
 *,
 *:before,
 *:after {
@@ -191,4 +200,24 @@ code {
 
 .multiselect--active {
     z-index: 1000 !important;
+}
+
+.chart-panel {
+    width: 100%;
+    .panel-header {
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px 0;
+        background-color: #eee;
+    }
+    .header-icon {
+        float: right;
+        cursor: pointer;
+    }
+}
+
+@media screen and (min-width: 1366px) {
+    .chart-panel {
+        width: 50%;
+    }
 }

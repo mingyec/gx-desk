@@ -14,7 +14,7 @@
                 <span>{{item.text}}</span>
             </div>
             <el-collapse-transition>
-                <m-tree @point-select="pointSelect" v-show="treeShow" class="tree" v-if="item.children && item.children.length > 0" :data="item.children" :multi-select="multiSelect"></m-tree>
+                <m-tree @point-select="pointSelect" class="tree" v-if="item.children && item.children.length > 0" :data="item.children" :multi-select="multiSelect"></m-tree>
             </el-collapse-transition>
         </div>
     </div>
@@ -28,12 +28,15 @@
         data() {
             return {
                 lastSelect: null,  //最后一次选择的点
-                treeShow: true,
                 nodes: [],  //缓存选择过的节点
                 nodeIds: []  //缓存选择过的节点ID
             }
         },
-        created() {
+        destroyed() {
+            //为了触发highcharts的自适应
+            window.dispatchEvent(new Event('resize'));
+        },
+        mounted() {
             let data = this.data;
             let lastSelect = this.lastSelect;
             //默认勾选第一个
@@ -51,6 +54,7 @@
                     }
                 }
             }
+            window.dispatchEvent(new Event('resize'));
         },
         props: {
             data: {
@@ -85,7 +89,6 @@
                     item.checked = !item.checked;
                 }else {
                     //若没有[checked]属性且不是[多选状态]则点击可展开/收缩节点
-                    this.treeShow = !this.treeShow;
                     item.expanded = !item.expanded;
                 }
 
@@ -114,7 +117,6 @@
                 }
             },
             expand(item) {
-                this.treeShow = !this.treeShow;
                 item.expanded = item.expanded ? false : true;
             }
         }

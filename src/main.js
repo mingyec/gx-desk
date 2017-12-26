@@ -7,6 +7,7 @@ import store from './store'
 import './icons'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import './components/Highcharts'
 // import 'normalize.css/normalize.css'
 
 Vue.config.productionTip = false

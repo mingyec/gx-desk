@@ -86,8 +86,8 @@
                 //判断是否精确选择到时分秒
                 if(this.timeTool === 'datetime' || this.timeTool === 'datetimerange') {
                     if(date instanceof Array) {  //为数组则是时间范围
-                        date[0] = `${moment(date[0]).format('YYYY-MM-DD')} 00:00:00`;  //开始
-                        date[1] = `${moment(date[1]).format('YYYY-MM-DD')} 23:59:59`;  //结束
+                        date[0] = `${moment(date[0]).format('YYYY-MM-DD HH:mm:ss')}`;  //开始
+                        date[1] = `${moment(date[1]).format('YYYY-MM-DD HH:mm:ss')}`;  //结束
                     }else {
                         date = moment(date).format('YYYY-MM-DD');
                     }

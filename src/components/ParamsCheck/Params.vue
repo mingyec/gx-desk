@@ -9,7 +9,7 @@
 </template>
 
 <script>
-
+    import { debounce } from '@/utils'
     export default {
         name: 'paramsPanel',
         props: {
@@ -21,8 +21,9 @@
         data() {
             return {
                 checkAll: false,
-                checkedParams: ['三相电压'],
-                isIndeterminate: true
+                checkedParams: [this.params[0]],
+                isIndeterminate: true,
+                items: []
             }
         },
         methods: {
@@ -36,10 +37,17 @@
                 }
             },
             checkedBox(val) {
+                const delay = 1000;
                 let checkedCount = val.length;
                 this.checkAll = checkedCount === this.params.length;
                 this.isIndeterminate = checkedCount > 0 && checkedCount < this.params.length;
-                this.$emit('param-select', val);
+                // this.$emit('param-select', val);
+                this.items = val;
+                debounce(this.debounceFn, delay)();
+            },
+            debounceFn() {
+                this.$emit('param-select', this.items);
+                this.items = [];
             }
         }
     }
