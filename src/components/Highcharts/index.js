@@ -8,7 +8,8 @@ boost(highcharts);
 highcharts.setOptions({
     lang: {
         noData: '暂无数据'
-    }
+    },
+    colors: ['#E6A23C', '#67C23A', '#F56C6C', '#409EFF', '#409EFF', '#409EFF']
 })
 
 /**

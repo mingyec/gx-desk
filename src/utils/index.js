@@ -14,4 +14,14 @@ function debounce(fn, delay) {
         }, delay);
     }
 }
-export { debounce }
+
+const color = {
+    A: '',
+    B: '',
+    C: '',
+    a: '',
+    b: '',
+    c: '',
+    info: ''
+}
+export { debounce, color }

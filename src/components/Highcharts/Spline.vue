@@ -6,7 +6,7 @@
         </header>
         <div :style="{height: chartHeight}" class="charts-container" ref="chart"></div>
 
-        <el-dialog title="图表标题" :visible.sync="Maximize" @open="dialogOpen" width="80%">
+        <el-dialog :title="title" :visible.sync="Maximize" @open="dialogOpen" width="80%">
             <div ref="maxChart" class="charts-container"></div>
         </el-dialog>
     </el-col>
@@ -60,6 +60,10 @@
             seriesLength: {
                 type: Number,
                 default: 1
+            },
+            legend: {
+                type: Object,
+                default: null
             }
         },
         data() {
@@ -73,20 +77,21 @@
             this.initChart();
         },
         methods: {
-            /* Maximize() {
-                const chart = this.chart;
-                console.info(chart)
-            }, */
             dialogOpen() {
-                let series = this.chart.userOptions.series;
+                let series = this.chart.series;
                 let options = this.getOptions();
-                console.info(series);
-                console.info(options);
-                console.info(this.$refs.maxChart)
-                options.series = series;
+                let chartData = [];
+                for(let item of series) {
+                    chartData.push({
+                        data: item.options.data,
+                        name: item.options.name
+                    });
+                }
+                options.series = chartData;
                 options.xAxis[0].events = null;
                 setTimeout(() => {
                     this.maxChart = new highcharts.chart(this.$refs.maxChart, options);
+                    // console.info(this.maxChart)
                 },0);
 
             },

@@ -2,9 +2,13 @@
     <el-col class="chart-panel">
         <header class="panel-header">
             <span>{{title}}</span>
-            <svg-icon icon-class="fullscreen" class-name="header-icon"></svg-icon>
+            <svg-icon icon-class="fullscreen" class-name="header-icon" @click.native="Maximize = true"></svg-icon>
         </header>
         <div :style="{height: chartHeight}" class="charts-container" ref="chart"></div>
+
+        <el-dialog :title="title" :visible.sync="Maximize" @open="dialogOpen" width="80%">
+            <div ref="maxChart" class="charts-container"></div>
+        </el-dialog>
     </el-col>
 </template>
 
@@ -41,27 +45,41 @@
         },
         data() {
             return {
-                chart: null
+                chart: null,
+                maxChart: null,
+                Maximize: false
             }
         },
         mounted() {
             this.initChart();
         },
         methods: {
+            dialogOpen() {
+                let series = this.chart.userOptions.series;
+                let options = this.getOptions();
+                options.series = series;
+                setTimeout(() => {
+                    this.maxChart = new highcharts.chart(this.$refs.maxChart, options);
+                },0);
+
+            },
             initChart() {
+                let options = this.getOptions();
+                this.chart = new highcharts.chart(this.$refs.chart, options)
+            },
+            getOptions() {
                 let me = this;
                 let series = [];
                 let unit = me.unit ? `（${this.unit}）` : '';
                 for(let i = 0;i < this.seriesLength;i ++) {
                     series.push({});
                 }
-
-                this.chart = new highcharts.chart(this.$refs.chart, {
+                return {
                     chart: {
                         marginTop: 5,
                         showAxes: true,
                         marginBottom: 75,
-                        plotBorderWidth: 1,
+                        // plotBorderWidth: 1,
                         zoomType: 'x',
                         animation: {
                             duration: 1500,
@@ -174,7 +192,7 @@
                         }
                     },
                     series: series
-                })
+                }
             }
         }
     }

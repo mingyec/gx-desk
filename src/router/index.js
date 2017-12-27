@@ -30,6 +30,14 @@ export const constantRouterMap = [{
             title: '监测树',
             icon: 'example'
         }
+    }, {
+        path: 'realtimeCurve',
+        component: $import('realtime/RealtimeCurve'),
+        name: 'realtimeCurve',
+        meta: {
+            title: '实时曲线',
+            icon: 'example'
+        }
     }]
 }]
 

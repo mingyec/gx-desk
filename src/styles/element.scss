@@ -12,3 +12,9 @@
     margin-right: 30px;
     margin-left: 0;
 }
+
+.el-main {
+    &>.el-tabs {
+        margin-top: -20px;
+    }
+}
