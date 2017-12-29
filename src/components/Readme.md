@@ -1,0 +1,15 @@
+# 组件 components
+- Breadcrumb 导航栏面包屑
+- Hamburger 汉堡包图标，用于收缩/展开导航栏
+- Header 标题栏组件
+- Highcharts 图表组件
+    - Column.vue 柱状图
+    - PowerFactor.vue 功率因数
+    - Spline.vue 曲线图配置
+    - **注意：** 后续格式在此补充
+- ParamsCheck 参量选择组件
+- Screenfull 全屏组件（浏览器F11）
+- Scrollbar 导航侧边栏
+- ScrollPane 顶部标签栏
+- SvgIcon 图标组件
+- Tree 树组件

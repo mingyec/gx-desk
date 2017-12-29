@@ -1,4 +1,7 @@
 # views 功能视图
+## 整体布局
+- layout 系统布局
+## 常规功能
 - degree：电量
 - charge：电费
 - quota：定额
@@ -12,3 +15,6 @@
 - product：产品相关
 - water：水量、水压
 - temperature：温湿度
+
+## 测试功能 || DEMO
+- test

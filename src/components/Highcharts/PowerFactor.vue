@@ -10,7 +10,6 @@
             <div ref="maxChart" class="charts-container"></div>
         </el-dialog>
     </el-col>
-
 </template>
 
 <script>
@@ -18,59 +17,29 @@
     import { syncExtremes } from './index'
     import moment from 'moment'
 
-    const yTitleMargin9 = 9;
-    const yTitleMargin50 = 50;
-    const yLabelMargin15 = 15;
-    const yLabelMargin9 = 9;
-    const yLabelMargin35 = -35;
-
     export default {
-        name: 'splineChart',
-        props: {
-            //图表高度
-            chartHeight: {
-                type: String,
-                default: '300px'
-            },
-            //日期类型，决定时间轴显示的单位
-            datetype: {
-                type: String,
-                default: 'day'
-            },
-            //图表名称
-            title: {
-                type: String,
-                default: ''
-            },
-            //单位
-            unit: {
-                type: String,
-                default: ''
-            },
-            //图表y轴数值的位数。如果是负数的话，负号占1位
-            valueLength: {
-                type: Number,
-                default: 5
-            },
-            //小数点
-            decimals: {
-                type: Number,
-                default: 2
-            },
-            seriesLength: {
-                type: Number,
-                default: 1
-            },
-            legend: {
-                type: Object,
-                default: null
-            }
-        },
+        name: 'powerFactor',
         data() {
             return {
                 chart: null,
                 maxChart: null,
                 Maximize: false
+            }
+        },
+        props: {
+            //图表名称
+            title: {
+                type: String,
+                default: ''
+            },
+            //图表高度
+            chartHeight: {
+                type: String,
+                default: '300px'
+            },
+            legend: {
+                type: Object,
+                default: null
             }
         },
         mounted() {
@@ -91,7 +60,6 @@
                 options.xAxis[0].events = null;
                 setTimeout(() => {
                     this.maxChart = new highcharts.chart(this.$refs.maxChart, options);
-                    // console.info(this.maxChart)
                 },0);
 
             },
@@ -100,49 +68,42 @@
                 this.chart = new highcharts.chart(this.$refs.chart, options);
             },
             getOptions() {
-                let me = this;
-                let series = [];
-                let unit = me.unit ? `（${this.unit}）` : '';
-                for(let i = 0;i < this.seriesLength;i ++) {
-                    series.push({});
-                }
                 return {
                     chart: {
                         showAxes: true,
                         type: 'spline',
                         marginTop: 5,
-                        marginBottom: 60,
+                        marginBottom : 60,
+                        plotBorderWidth: 1,
                         zoomType: 'x',
                         animation: {
                             duration: 1000,
                             easing: 'swing'
                         }
                     },
+                    legend: {
+                        y:12,
+                        style: {
+                            fontFamily: 'Arial 黑体',
+                            color: '#757575',
+                            fontSize: '12px',
+                            fontWeight: 'bold'
+                        }
+                    },
                     title: {
                         useHTML: true,
-                        text: null,
-                        floating: false,
+                        text: '<font color="red"><b>感性:0.9 </b></font><font color="green"><b>感性:0.95 </b></font><font color="blue"><b>容性:0.95 </b></font><font color="black"><b>容性:0.9 </b></font>',
                         style: {
-                            fontSize: '18px',
-                            fontFamily: 'Arial 黑体'
+                            fontSize: '12px'
                         },
                         y: 5
-                    },
-                    legend: {
-                        borderWidth: 0,
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom',
-                        enabled: true,
-                        y: 10,
-                        floating: true
                     },
                     xAxis: [{
                         events: {
                             setExtremes: syncExtremes
                         },
                         title: {
-                            margin: 3,
+                            text: '时间',
                             align: 'high',
                             style: {
                                 fontFamily: 'Arial 黑体',
@@ -153,28 +114,22 @@
                         },
                         type: 'datetime',
                         labels: {
-                            enabled: true,
-                            rotation: -10,
+                            rotation: 8,
                             y: 15,
+                            formatter: function () {
+                                return moment(this.value).format('HH:mm:ss')
+                            },
                             style: {
                                 fontFamily: 'Arial 黑体',
-                                fontSize: '12px',
                                 color: '#757575',
-                            },
-                            formatter: function() {
-                                // const zoneOffset = -8;
-                                if (me.datetype == 'day') {
-                                    return moment(this.value).format('MM-DD HH:mm');
-                                } else {
-                                    return moment(this.value).format('HH:mm:ss')
-                                }
+                                fontSize: '12px',
+                                fontWeight: 'bold'
                             }
                         }
                     }],
                     yAxis: {
                         title: {
-                            text: `${me.title}${unit}`,
-                            margin: me.valueLength ? me.valueLength* yTitleMargin9 : yTitleMargin50,
+                            text: '总功率因数',
                             style: {
                                 fontFamily: 'Arial 黑体',
                                 fontSize: '14px',
@@ -183,53 +138,78 @@
                             }
                         },
                         labels: {
-                            align: 'left',
-                            x: me.valueLength ? yLabelMargin15 - (me.valueLength * yLabelMargin9) : yLabelMargin35,
-                            // format: '{value}',
-                            formatter: function() {
-                                let intValueLength = this.value.toFixed(0).length;
-                                let result;
-                                if (intValueLength > 0 && intValueLength <= me.valueLength) {
-                                    result = this.value.toFixed(me.valueLength - intValueLength);
+                            formatter: function () {
+                                let value;
+                                const decimal = 3;
+                                if (this.value >= 0) {
+                                    value = (1 - this.value).toFixed(decimal);
                                 } else {
-                                    result = this.value;
+                                    value = (-(0 - this.value - 1)).toFixed(decimal);
                                 }
-                                return result;
+                                return value !== 'undefined' ? value : this.value;
                             },
                             style: {
                                 fontFamily: 'Arial 黑体',
-                                fontSize: '12px',
                                 color: '#757575',
+                                fontSize: '12px',
+                                fontWeight: 'bold'
                             }
-                        }
+                        },
+                        plotLines: [{
+                            color: 'red',
+                            value: 0.1,
+                            width: 2,
+                            dashStyle: 'dash',
+                        }, {
+                            color: 'green',
+                            value: 0.05,
+                            width: 2,
+                            dashStyle: 'dash',
+                        }, {
+                            color: 'black',
+                            value: -0.1,
+                            width: 2,
+                            dashStyle: 'dash',
+                        }, {
+                            color: 'blue',
+                            value: -0.05,
+                            width: 2,
+                            dashStyle: 'dash',
+                        }],
+                        maxPadding: 0.25
                     },
                     plotOptions: {
                         series: {
                             marker: {
                                 radius: 0
-                            }
+                            },
+                            lineWidth: 1.5
                         }
                     },
                     tooltip: {
                         shared: true,
                         crosshairs: true,
-                        valueDecimals: me.decimals,
-                        useHTML: true,
-                        formatter: function() {
-                            const decimal = 2;
-                            let s = `<b>${moment(this.x).format('YYYY-MM-DD HH:mm:ss')}</b>`;
+                        formatter: function () {
+                            const decimal = 3;
+                            let s = `<b>时间：${highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x)}</b>`;
                             this.points.forEach((point) => {
-                                s += `<br/><span style="color: ${point.point.color}">${point.series.name}</span>：<b>${this.y.toFixed(decimal)}</b>${me.unit}`
+                                if(point.y >= 0) {
+                                    s += `<br/><b>感性功率因数</b>：${(1 - point.y).toFixed(decimal)}`;
+                                }else if(point.y < 0) {
+                                    s += `<br/><b>容性功率因数</b>：${(-(0 - point.y - 1)).toFixed(decimal)}`;
+                                }
                             });
                             return s;
+                        },
+                        style: {
+                            fontFamily: 'Arial 黑体',
+                            fontSize: '14px'
                         }
-                        // xDateFormat: '%Y-%m-%d %H:%m:%S',
-                        // pointFormat: `<span style="color:{series.color}">{series.name}:</span>  <b>{point.y}</b>${me.unit}<br/>`,
                     },
                     credits: {
                         enabled: false
                     },
-                    series: series
+                    series: [{}]
                 }
             }
         }

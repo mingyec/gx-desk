@@ -6,7 +6,7 @@
         </header>
         <transition name="fade">
             <div v-if="show" class="tree-panel">
-                <el-date-picker @change="timeSelect" :style="pickerWidth" v-model="value" size="mini" :type="timeTool" :picker-options="options" range-separator="至" start-placeholder="开始时间" end-placeholder="结束日期" align="right"></el-date-picker>
+                <el-date-picker v-if="timeTool" @change="timeSelect" :style="pickerWidth" v-model="value" size="mini" :type="timeTool" :picker-options="options" range-separator="至" start-placeholder="开始时间" end-placeholder="结束日期" align="right"></el-date-picker>
                 <m-tree :data="data" style="margin-top: 10px;" @point-select="pointSelect" :multi-select="multiSelect"></m-tree>
             </div>
         </transition>
@@ -44,7 +44,7 @@
             },
             timeTool: {
                 type: String,
-                default: 'date'
+                default: null
             },
             multiSelect: {
                 type: Boolean,

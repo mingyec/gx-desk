@@ -6,6 +6,9 @@ nodata(highcharts)
 boost(highcharts);
 
 highcharts.setOptions({
+    global: {
+        useUTC: false
+    },
     lang: {
         noData: '暂无数据'
     },

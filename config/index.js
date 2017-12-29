@@ -19,7 +19,8 @@ module.exports = {
                 }
             },
             '/rest': {
-                target: 'http://192.168.1.10:8080/gx-desk/rest',
+                // target: 'http://192.168.1.10:8080/gx-desk/rest',
+                target: 'http://127.0.0.1:8080/gx-desk-v3/rest',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/rest': '/'
